@@ -101,6 +101,9 @@ class DegradeResrOfficial:
 
         #########################################
 
+        
+
+
         self.gt = gt.to(self.device)
         self.gt_usm = self.usm_sharpener(self.gt)
 
@@ -222,6 +225,21 @@ def load_img_rgb_0_1_tensor(path):
 	image = torch.from_numpy(image)
 	return image
 
+
+def load_img_bg_0_1_cv(path,isbgr=True):
+    image = cv2.imread(path)
+    if isbgr: 
+        image=cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    image = np.array(image).astype(np.float32) / 255.0
+    return image
+
+def imgcv2tensor(image):
+    image = image[None].transpose(0, 3, 1, 2)
+    image = torch.from_numpy(image)
+    return image
+    
+    
+
 def rgb_0_1_tensor2cv(imagein):
 
     image=255*rearrange(imagein[0].detach().cpu().numpy(), 'c h w -> h w c')
@@ -232,6 +250,13 @@ def rgb_0_1_tensor2cv(imagein):
 
 
 # rearrange(x_samples[i].cpu().numpy(), 'c h w -> h w c')
+# 
+
+
+def imgtrans_cv(opt,gt):
+    gt = augment(gt, opt['use_hflip'], opt['use_rot'])
+    return gt
+
 
 
 if __name__=='__main__':
@@ -256,6 +281,14 @@ if __name__=='__main__':
         
         image_tensor=load_img_rgb_0_1_tensor(im)
         print(image_tensor.shape)
+
+
+        imgcv=load_img_bg_0_1_cv(im)
+
+        imgcv=imgtrans_cv(opt,imgcv)
+
+
+        image_tensor=imgcv2tensor(imgcv)
 
 
         time_st=time.time()
