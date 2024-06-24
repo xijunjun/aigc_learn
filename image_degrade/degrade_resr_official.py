@@ -9,13 +9,14 @@ from PIL import Image
 import PIL
 from einops import rearrange, repeat
 import  math
-from basicsr.utils import DiffJPEG, USMSharp
-from basicsr.utils.img_process_util import filter2D
+# from basicsr.utils import DiffJPEG, USMSharp
+# from basicsr.utils.img_process_util import filter2D
 from torch.nn import functional as F
 import time
 
 from funcs_basicsr import *
 
+import torch.nn as nn
 
 class DegradeResrOfficial:
     def __init__(self, opt):

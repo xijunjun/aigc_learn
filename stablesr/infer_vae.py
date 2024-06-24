@@ -140,7 +140,7 @@ if __name__=='__main__':
     
     
     
-    vq_model.decoder.fusion_w = 0.0
+    vq_model.decoder.fusion_w = 1.0
     
     
     
