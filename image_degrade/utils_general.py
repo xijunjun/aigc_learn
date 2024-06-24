@@ -320,6 +320,12 @@ def mp_main():
 
 #########################################################################################################
 
-
+def get_ims_curdir(imgpath):
+    imgpathlst=[]
+    for filename in os.listdir(imgpath):
+        # subdir=lstripstr(dirpath,imgpath)
+        if os.path.splitext(filename)[1] in ['.jpg','.jpeg','.png']:
+            imgpathlst.append(os.path.join(imgpath, filename))
+    return imgpathlst
 
 
