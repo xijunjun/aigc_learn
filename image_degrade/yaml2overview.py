@@ -101,7 +101,7 @@ if __name__=='__main__':
 
     opt=yaml_load(r'/disks/disk1/Workspace/mycode/gitproj/aigc_learn/image_degrade/train_realesrgan_x4plus.yml')
 
-    imroot=r'/home/tao/disk1/Dataset/FIVEK/FiveK_480p/test/A'
+    imroot=r'/home/tao/mynas/Dataset/hairforsr/ultrahd'
 
 
     optdot=DotDict(opt)
@@ -116,39 +116,42 @@ if __name__=='__main__':
     for im in ims:
 
         # imgcv=cv2.imread(im)
+        while 1:
         
-        image_tensor=load_img_rgb_0_1_tensor(im)
-        print(image_tensor.shape)
+            image_tensor=load_img_rgb_0_1_tensor(im)
+            print(image_tensor.shape)
 
 
-        imgcv=load_img_bg_0_1_cv(im)
+            imgcv=load_img_bg_0_1_cv(im)
 
-        imgcv=imgtrans_cv(opt,imgcv)
-
-
-        image_tensor=imgcv2tensor(imgcv)
+            # imgcv=imgtrans_cv(opt,imgcv)
 
 
-        time_st=time.time()
-        pred_tensor=degrade_obj.run_data(image_tensor)
-        runtime=time.time()-time_st
-        
-        print('runtime:',runtime)
+            imgcv=cv2.resize(imgcv,(1024,1024))
+
+            image_tensor=imgcv2tensor(imgcv)
 
 
-        # imgcv=rgb_0_1_tensor2cv(pred_tensor)
-
-        imgcv=(tensor2cv(pred_tensor)*255).astype(np.uint8)
-        imgcv=cv2.cvtColor(imgcv, cv2.COLOR_RGB2BGR)
-        
-
-        print(im)
+            time_st=time.time()
+            pred_tensor=degrade_obj.run_data(image_tensor)
+            runtime=time.time()-time_st
+            
+            print('runtime:',runtime)
 
 
-        cv2.imshow('img', limit_img_auto(imgcv))
+            # imgcv=rgb_0_1_tensor2cv(pred_tensor)
 
-        if cv2.waitKey(0)==27:
-            exit(0)
+            imgcv=(tensor2cv(pred_tensor)*255).astype(np.uint8)
+            imgcv=cv2.cvtColor(imgcv, cv2.COLOR_RGB2BGR)
+            
+
+            print(im)
+
+
+            cv2.imshow('img', limit_img_auto(imgcv))
+
+            if cv2.waitKey(20)==27:
+                exit(0)
 
 
 
